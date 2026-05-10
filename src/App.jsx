@@ -335,6 +335,8 @@ const styles = `
     padding: 16px 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 22px;
   }
   .briefing-wrap p {
@@ -342,10 +344,14 @@ const styles = `
     line-height: 1.75;
     color: var(--ink-dim);
     margin: 0;
+    text-align: left;
+    max-width: 600px;
   }
   .briefing-wrap p strong { color: var(--ink-bright); font-weight: 600; }
+  .briefing-wrap > div {
+    width: 100%;
+  }
   .briefing-wrap .btn {
-    align-self: flex-start;
     margin-top: 8px;
   }
 
@@ -372,12 +378,21 @@ const styles = `
       font-size: 15px;
     }
     .briefing-wrap .btn {
-      align-self: stretch;
+      width: 100%;
       text-align: center;
     }
     .level-shell > .btn-primary {
       width: 100%;
       margin-top: 20px;
+    }
+    /* prevent giant numbers from overflowing on small screens */
+    .alien-font {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    /* extra breathing room around results panels on phones */
+    .level-shell .panel {
+      margin-bottom: 14px;
     }
   }
 
@@ -2000,12 +2015,12 @@ function Boss({ onDone, setLevelBack }) {
     const success = meters.sales > 250;
     return (
       <LevelShell title="✦ Final Result" tag="EXPERIMENT COMPLETE" stepKey={step}>
-        <div className="panel" style={{ padding: 36, textAlign: "center" }}>
-          <div style={{ fontSize: 80, lineHeight: 1, marginBottom: 24 }}>🪨</div>
+        <div className="panel" style={{ padding: "32px 20px", textAlign: "center" }}>
+          <div style={{ fontSize: 72, lineHeight: 1, marginBottom: 24 }}>🪨</div>
           <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--mint)", letterSpacing: "0.3em" }}>▸ FINAL DATA</div>
-          <div className="alien-font" style={{ fontSize: 64, lineHeight: 1.2, color: "var(--pink)", textShadow: "0 0 32px var(--pink)", margin: "16px 0 4px" }}>{Math.round(meters.sales)}</div>
-          <div className="mono" style={{ color: "var(--ink-dim)", letterSpacing: "0.2em", fontSize: 13, fontWeight: 700 }}>UNITS PURCHASED</div>
-          <div className="serif" style={{ fontStyle: "italic", fontSize: 22, color: success ? "var(--mint)" : "var(--peach)", marginTop: 28, lineHeight: 1.4 }}>
+          <div className="alien-font" style={{ fontSize: "clamp(40px, 12vw, 64px)", lineHeight: 1.2, color: "var(--pink)", textShadow: "0 0 32px var(--pink)", margin: "16px 0 4px", wordBreak: "break-all" }}>{Math.round(meters.sales)}</div>
+          <div className="mono" style={{ color: "var(--ink-dim)", letterSpacing: "0.2em", fontSize: 12, fontWeight: 700 }}>UNITS PURCHASED</div>
+          <div className="serif" style={{ fontStyle: "italic", fontSize: "clamp(16px, 4vw, 22px)", color: success ? "var(--mint)" : "var(--peach)", marginTop: 28, lineHeight: 1.5, padding: "0 8px" }}>
             {success ? "The rock has become a specialty product." : "The rock has been moderately accepted."}
           </div>
         </div>
