@@ -1426,28 +1426,99 @@ function Level3({ onDone, setLevelBack }) {
     );
   }
 
-  if (step === 2) return (
-    <LevelShell title="03 / Human Reaction Screen" tag="OBSERVATION" stepKey={step}>
-      <div className="reaction-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
-        {[
-          { seg: "status", reaction: choices.scope === "co" ? "PURCHASE FRENZY: 'It's a collab.'" : choices.owner === "captive" ? "intrigued by exclusivity" : "moderate interest" },
-          { seg: "parent", reaction: choices.legal === "tm" ? "high trust, recognized mark" : choices.legal === "gen" ? "confused about authenticity" : "trusting service" },
-          { seg: "convenience", reaction: choices.scope === "family" ? "recognized family — easy decision" : "neutral" },
-          { seg: "tech", reaction: choices.owner === "manuf" ? "trusts producer transparency" : "skeptical" },
-        ].map((r) => {
-          const s = SEGMENTS[r.seg];
-          return (
-            <div key={r.seg} className="panel" style={{ padding: 14 }}>
-              <div style={{ fontSize: 22, color: s.color }}>{s.icon}</div>
-              <div className="serif" style={{ fontWeight: 700, marginTop: 4 }}>{s.name}</div>
-              <div style={{ fontSize: 12, color: "var(--ink-dim)", marginTop: 4, fontStyle: "italic" }}>"{r.reaction}"</div>
-            </div>
-          );
-        })}
-      </div>
-      <button className="btn btn-primary" onClick={() => setStep(3)}>VIEW CONCEPT ▸</button>
-    </LevelShell>
-  );
+  if (step === 2) {
+    // Build rich, contextual reactions for each segment based on player's choices
+    const buildReactions = () => {
+      const reactions = [];
+
+      // STATUS HUMANS - care about exclusivity and prestige
+      let statusReaction = "";
+      if (choices.scope === "co") {
+        statusReaction = "Bought in waves. A co-branded collab signals cultural relevance and 'limited drop' energy — exactly what status buyers crave for social signaling.";
+      } else if (choices.owner === "captive") {
+        statusReaction = "Intrigued. A hidden brand at one exclusive retailer feels insider — like a secret only certain shoppers know about. Perceived exclusivity raises desire.";
+      } else if (choices.scope === "individual") {
+        statusReaction = "Moderate interest. A unique standalone brand can feel premium, but without a clear status signal (collab, exclusivity, scarcity), they hesitate.";
+      } else {
+        statusReaction = "Lukewarm. Family branding and broad availability feel too 'everyone has it' for status buyers. They want rarity.";
+      }
+      reactions.push({ seg: "status", reaction: statusReaction });
+
+      // PARENT HUMANS - care about trust, safety, and proven quality
+      let parentReaction = "";
+      if (choices.legal === "tm") {
+        parentReaction = "High trust. The trademark proves the brand is legitimate and accountable — exactly what parents look for when buying anything for their family.";
+      } else if (choices.legal === "sm") {
+        parentReaction = "Trusting, especially the service guarantee. Parents read fine print and reward brands that stand behind what they sell.";
+      } else {
+        parentReaction = "Suspicious. Without legal protection, parents worry about quality, recalls, and accountability. They'd rather pay more for a brand they can hold responsible.";
+      }
+      reactions.push({ seg: "parent", reaction: parentReaction });
+
+      // CONVENIENCE HUMANS - want fast, familiar, low-effort decisions
+      let convenienceReaction = "";
+      if (choices.scope === "family") {
+        convenienceReaction = "Easy yes. They already trust the Aether Stones family name from a previous purchase. No research needed — they recognize the umbrella brand and grab it.";
+      } else if (choices.scope === "individual") {
+        convenienceReaction = "Hesitant. A brand new individual brand name means starting trust from zero. Convenience shoppers don't have time to vet unknown names.";
+      } else {
+        convenienceReaction = "Neutral. Co-branding adds complexity. Convenience buyers want simple, familiar, fast — anything that requires interpretation slows them down.";
+      }
+      reactions.push({ seg: "convenience", reaction: convenienceReaction });
+
+      // TECH HUMANS - care about transparency, source, and provenance
+      let techReaction = "";
+      if (choices.owner === "manuf") {
+        techReaction = "Endorsed. A clear manufacturer brand means traceable supply chain and direct accountability. Tech buyers love knowing exactly who made what.";
+      } else if (choices.owner === "private") {
+        techReaction = "Skeptical. Store brands hide the actual manufacturer. Tech buyers want to know the source and won't trust an opaque retailer-only label.";
+      } else {
+        techReaction = "Mixed. Captive brands feel mysterious — interesting to some, but tech buyers prefer transparent supply chains over secret manufacturer arrangements.";
+      }
+      reactions.push({ seg: "tech", reaction: techReaction });
+
+      // WELLNESS HUMANS - bonus segment based on co-branding
+      let wellnessReaction = "";
+      if (choices.scope === "family" && choices.owner === "manuf") {
+        wellnessReaction = "Strong adoption. A trusted producer with a cohesive family line feels intentional and curated — the wellness aesthetic.";
+      } else if (choices.scope === "co") {
+        wellnessReaction = "Cautious. Co-branding can feel commercial. Wellness humans prefer brands that feel pure, mission-driven, and singular.";
+      } else {
+        wellnessReaction = "Moderate. They like the calming brand promise but want more signals of authenticity (origin story, ingredient transparency, certifications).";
+      }
+      reactions.push({ seg: "wellness", reaction: wellnessReaction });
+
+      return reactions;
+    };
+
+    const reactions = buildReactions();
+
+    return (
+      <LevelShell title="03 / Human Reaction Screen" tag="OBSERVATION" stepKey={step}>
+        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 16, fontWeight: 600 }}>
+          ▸ Five human segments responded to your branding choices. Different priorities, different reactions.
+        </p>
+        <div style={{ display: "grid", gap: 12 }}>
+          {reactions.map((r) => {
+            const s = SEGMENTS[r.seg];
+            return (
+              <div key={r.seg} className="panel" style={{ padding: 18, borderLeft: `3px solid ${s.color}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+                  <span style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
+                  <div>
+                    <div className="serif" style={{ fontWeight: 700, fontSize: 16, color: "var(--ink-bright)" }}>{s.name}</div>
+                    <div className="mono" style={{ fontSize: 10, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.1em", marginTop: 2 }}>{s.desc}</div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 14, color: "var(--ink-dim)", margin: 0, lineHeight: 1.65 }}>{r.reaction}</p>
+              </div>
+            );
+          })}
+        </div>
+        <button className="btn btn-primary" onClick={() => setStep(3)}>VIEW CONCEPT ▸</button>
+      </LevelShell>
+    );
+  }
 
   if (step === 3) return (
     <LevelShell title="03 / Concept" tag="CHAPTER 10 INSIGHT" stepKey={step}>
@@ -1624,14 +1695,114 @@ function Level4({ onDone, setLevelBack }) {
             <Meter label="Perceived Value" value={meters.val} c1="var(--mint)" />
             <Meter label="Trust" value={meters.trust} c1="var(--peach)" />
             <Meter label="Hype" value={meters.hype} c1="var(--pink)" />
-            <button className="btn btn-primary" disabled={!allDone} style={{ width: "100%", marginTop: 16 }} onClick={() => setStep(2)}>VIEW REACTIONS ▸</button>
+            <button className="btn btn-primary" disabled={!allDone} style={{ width: "100%", marginTop: 16 }} onClick={() => setStep(2)}>LAUNCH PACKAGED ROCK ▸</button>
           </div>
         </div>
       </LevelShell>
     );
   }
 
-  if (step === 2) return (
+  if (step === 2) {
+    // Calculate per-segment sales based on packaging choices
+    const segmentResults = [
+      {
+        seg: "status",
+        score: (pkg.aesthetic === "matte" ? 60 : pkg.aesthetic === "natural" ? 20 : 5) + (pkg.label === "persuasive" ? 20 : pkg.label === "both" ? 15 : 5),
+      },
+      {
+        seg: "wellness",
+        score: (pkg.aesthetic === "natural" ? 60 : pkg.aesthetic === "matte" ? 20 : 5) + (pkg.eco === "yes" ? 25 : 0) + (pkg.label === "persuasive" ? 15 : pkg.label === "both" ? 20 : 10),
+      },
+      {
+        seg: "parent",
+        score: (pkg.label === "informational" ? 40 : pkg.label === "both" ? 30 : 5) + (pkg.eco === "yes" ? 20 : 0) + (pkg.upc === "yes" ? 15 : 0),
+      },
+      {
+        seg: "convenience",
+        score: (pkg.aesthetic === "neon" ? 40 : 20) + (pkg.upc === "yes" ? 30 : -10) + (pkg.label === "informational" ? 5 : 15),
+      },
+      {
+        seg: "tech",
+        score: (pkg.label === "informational" ? 35 : pkg.label === "both" ? 25 : 10) + (pkg.upc === "yes" ? 25 : -5) + (pkg.aesthetic === "matte" ? 15 : 5),
+      },
+    ];
+    const totalSales = segmentResults.reduce((sum, r) => sum + Math.max(0, r.score) * 6, 0);
+
+    const reactionFor = (seg, score) => {
+      const reactions = {
+        status: {
+          high: `Status humans bought immediately. The ${pkg.aesthetic === "matte" ? "matte minimal" : pkg.aesthetic === "natural" ? "natural linen" : "neon clamshell"} aesthetic reads as ${pkg.aesthetic === "matte" ? "premium and curated" : pkg.aesthetic === "natural" ? "intentional and editorial" : "unfortunately mass-market"}. ${pkg.label === "persuasive" ? "Persuasive lifestyle copy made it Instagrammable." : ""}`,
+          mid: `Lukewarm. The packaging doesn't say 'I'm exclusive' loudly enough. Status buyers want visual signals of rarity and prestige.`,
+          low: `Ignored. The ${pkg.aesthetic === "neon" ? "neon clamshell" : "current aesthetic"} signals cheap or commodity — anti-status. Status humans walked past it.`,
+        },
+        wellness: {
+          high: `Strong adoption. The ${pkg.aesthetic === "natural" ? "linen-wrapped natural look" : "aesthetic"}${pkg.eco === "yes" ? " plus recyclable packaging" : ""} aligns with wellness values: calm, intentional, earth-friendly. ${pkg.label !== "informational" ? "Persuasive copy reinforced emotional benefits." : ""}`,
+          mid: `Curious. ${pkg.eco === "yes" ? "The eco packaging helps, but" : "Without eco-credentials,"} wellness buyers want more cues of authenticity and clean design.`,
+          low: `Rejected. ${pkg.eco === "no" ? "Single-use plastic kills credibility." : "The aesthetic feels too corporate."} Wellness humans avoid brands that don't match their identity.`,
+        },
+        parent: {
+          high: `High trust. ${pkg.label === "informational" || pkg.label === "both" ? "Clear factual labeling" : "Detailed information"} reassures parents about safety and quality. ${pkg.eco === "yes" ? "Eco-friendly packaging adds bonus trust points." : ""}${pkg.upc === "yes" ? " Scannable UPC means it's verified-retail." : ""}`,
+          mid: `Hesitant. Parents want more reassurance — clearer ingredient lists, warnings, and proof of legitimate retail distribution.`,
+          low: `Skeptical. ${pkg.label === "persuasive" ? "Pure marketing copy with no facts feels like a scam." : ""}${pkg.upc === "no" ? " No UPC suggests it's not properly registered." : ""} Parents stay away.`,
+        },
+        convenience: {
+          high: `Quick grab. ${pkg.aesthetic === "neon" ? "Bright neon packaging catches the eye on a crowded shelf." : "The packaging stands out."} ${pkg.upc === "yes" ? "Scannable UPC means it's sold at the kind of stores convenience buyers actually shop at." : ""}`,
+          mid: `Maybe. Convenience humans want it to be obvious, accessible, and on every shelf. The current setup gets some of the way there.`,
+          low: `Skipped. ${pkg.upc === "no" ? "No UPC means it's not stocked at mass retailers — convenience buyers never see it." : "The aesthetic is too subtle to catch attention in a hurry."}`,
+        },
+        tech: {
+          high: `Endorsed. ${pkg.label === "informational" || pkg.label === "both" ? "Detailed specs and ingredient transparency" : "The product transparency"} appeals to tech buyers who want to know exactly what they're getting. ${pkg.upc === "yes" ? "UPC enables tracking and supply-chain visibility." : ""}`,
+          mid: `Interested but cautious. Tech buyers want more data — origin, materials, certifications, scannable codes for digital lookup.`,
+          low: `Pass. ${pkg.label === "persuasive" ? "Vague lifestyle claims with no specifications feel like marketing hype." : "Without informational labeling, tech buyers can't verify the product."}`,
+        },
+      };
+      const level = score >= 60 ? "high" : score >= 30 ? "mid" : "low";
+      return reactions[seg][level];
+    };
+
+    return (
+      <LevelShell title="04 / Earth Launch Results" tag="OBSERVATION" stepKey={step}>
+        <div className="panel" style={{ padding: 30, textAlign: "center", marginBottom: 16 }}>
+          <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--mint)", letterSpacing: "0.3em" }}>▸ DATA RETURN</div>
+          <div className="alien-font" style={{ fontSize: "clamp(42px, 10vw, 56px)", lineHeight: 1.2, color: "var(--pink)", margin: "16px 0 4px", textShadow: "0 0 32px var(--pink)" }}>{Math.round(totalSales)}</div>
+          <div className="mono" style={{ color: "var(--ink-dim)", letterSpacing: "0.2em", fontSize: 12, fontWeight: 700 }}>UNITS PURCHASED ACROSS HUMAN SEGMENTS</div>
+        </div>
+
+        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 12, fontWeight: 600 }}>
+          ▸ How each human segment reacted to your packaging:
+        </p>
+
+        <div style={{ display: "grid", gap: 12 }}>
+          {segmentResults.map((r) => {
+            const s = SEGMENTS[r.seg];
+            const sales = Math.max(0, r.score) * 6;
+            return (
+              <div key={r.seg} className="panel" style={{ padding: 18, borderLeft: `3px solid ${s.color}` }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
+                    <div>
+                      <div className="serif" style={{ fontWeight: 700, fontSize: 16, color: "var(--ink-bright)" }}>{s.name}</div>
+                      <div className="mono" style={{ fontSize: 10, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.1em", marginTop: 2 }}>{s.desc}</div>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div className="alien-font" style={{ fontSize: 22, lineHeight: 1.2, color: s.color }}>{sales}</div>
+                    <div className="mono" style={{ fontSize: 9, fontWeight: 700, color: "var(--ink-faint)", letterSpacing: "0.15em" }}>UNITS</div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 14, color: "var(--ink-dim)", margin: 0, lineHeight: 1.65 }}>{reactionFor(r.seg, r.score)}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <button className="btn btn-primary" onClick={() => setStep(3)}>VIEW CONCEPT ▸</button>
+      </LevelShell>
+    );
+  }
+
+  if (step === 3) return (
     <LevelShell title="04 / Concept" tag="CHAPTER 10 INSIGHT" stepKey={step}>
       <div className="panel" style={{ padding: 28 }}>
         <h3 className="serif" style={{ color: "var(--mint)", margin: 0, fontSize: 24 }}>Packaging is not the wrapper. It IS the message.</h3>
@@ -1659,11 +1830,11 @@ function Level4({ onDone, setLevelBack }) {
           </div>
         </div>
       </div>
-      <button className="btn btn-primary" onClick={() => setStep(3)}>QUIZ CHECKPOINT ▸</button>
+      <button className="btn btn-primary" onClick={() => setStep(4)}>QUIZ CHECKPOINT ▸</button>
     </LevelShell>
   );
 
-  if (step === 3) {
+  if (step === 4) {
     const Q = {
       q: "A label reads: 'Scientifically aligned with your emotional frequency.' This is an example of:",
       opts: [
