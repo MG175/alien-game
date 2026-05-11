@@ -1272,11 +1272,11 @@ function Level3({ onDone, setLevelBack }) {
   const decisions = [
     {
       id: "scope",
-      q: "How will Mood Water relate to your other products (Mood Bread, Mood Sand)?",
+      q: "How will the Anti-Sadness Rock relate to your other products (Anti-Anxiety Rock, Anti-Boredom Rock)?",
       opts: [
-        { t: "Each product gets its OWN unique brand name", v: "individual", explain: "INDIVIDUAL BRANDING — separate names protect each line if one fails." },
-        { t: "All products share the 'Mood' family name", v: "family", explain: "FAMILY BRANDING — shared equity, faster trust transfer between products." },
-        { t: "Combine with Galactic Donuts on the label", v: "co", explain: "CO-BRANDING — two brands signal combined credibility/audience." },
+        { t: "Each rock gets its OWN unique brand name", v: "individual", explain: "INDIVIDUAL BRANDING — separate names protect each line if one fails." },
+        { t: "All rocks share one family name (e.g., 'Aether Stones')", v: "family", explain: "FAMILY BRANDING — shared equity, faster trust transfer between products." },
+        { t: "Combine with Galactic Crystals Co. on the label", v: "co", explain: "CO-BRANDING — two brands signal combined credibility/audience." },
       ],
     },
     {
@@ -1316,10 +1316,13 @@ function Level3({ onDone, setLevelBack }) {
     <LevelShell title="03 / The Branding Chamber" tag="STAGE 03" stepKey={step}>
       <div className="briefing-wrap">
       <Alien accent="var(--lav)">
-        Subject confirms: humans assign more value to objects with <em>names</em>. Construct identity. Words and symbols increase brand equity. Brand equity increases purchases.
+        Subject confirms: humans assign more value to objects with <em>names</em>. The rock now has tangible AND intangible benefits. It still has no name. Construct identity. Words and symbols increase brand equity. Brand equity increases purchases.
       </Alien>
       <p className="serif">
         A <strong style={{ color: "var(--mint)" }}>brand</strong> is a name, term, symbol, or design that identifies and differentiates the product. The pronounceable part is the <strong style={{ color: "var(--ink)" }}>brand name</strong>; the visual is the <strong style={{ color: "var(--ink)" }}>brand mark</strong>. Strong brands accumulate <strong style={{ color: "var(--ink)" }}>brand equity</strong> — value created by recognition and loyalty.
+      </p>
+      <p className="serif">
+        Build a brand around the Anti-Sadness Rock you've been studying.
       </p>
       <button className="btn btn-primary" onClick={() => setStep(1)}>ENTER BRANDING LAB ▸</button>
       </div>
@@ -1521,7 +1524,7 @@ function Level4({ onDone, setLevelBack }) {
         Hypothesis confirmed in 412 trials: <em>identical contents</em> in different packaging produce different human responses. Packaging contains, protects, promotes, aids storage, and reduces waste. It also <em>signals meaning</em>.
       </Alien>
       <p className="serif">
-        Configure packaging for <strong style={{ color: "var(--mint)" }}>Glow Milk</strong>. Choose aesthetic, labeling style, eco-impact, and whether to add a <strong>UPC</strong> (Universal Product Code) for retail scanning.
+        The Anti-Sadness Rock now has a brand. Time to design its packaging. Choose aesthetic, labeling style, eco-impact, and whether to add a <strong style={{ color: "var(--ink)" }}>UPC</strong> (Universal Product Code) for retail scanning.
       </p>
       <button className="btn btn-primary" onClick={() => setStep(1)}>ENTER PACKAGING LAB ▸</button>
       </div>
@@ -1688,7 +1691,7 @@ function Level5({ onDone, setLevelBack }) {
         Earth has many sub-territories. Different climates. Different languages. Different package sizes preferred. Adapt or fail. Also: humans demand <em>guarantees</em> — written or unwritten.
       </Alien>
       <p className="serif">
-        Launch your product in three Earth regions. Decide whether to keep one global brand name or adapt it. Adjust packaging for climate. Choose preferred sizes. Then add a warranty.
+        Launch the Anti-Sadness Rock in three Earth regions. Decide whether to keep one global brand name or adapt it. Adjust packaging for climate. Choose preferred sizes. Then add a warranty.
       </p>
       <button className="btn btn-primary" onClick={() => setStep(1)}>BEGIN GLOBAL ROLLOUT ▸</button>
       </div>
