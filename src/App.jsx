@@ -1092,93 +1092,102 @@ function Level2({ onDone, setLevelBack }) {
     return (
       <LevelShell title="02 / Classification Console" tag="LAB-B" stepKey={step}>
         <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 16, fontWeight: 600 }}>
-          ▸ Click a product to select it (highlights pink), then click a category to assign.
+          ▸ For each product, tap the category that matches how humans buy it.
         </p>
-        <div className="two-col" style={{ gap: 20 }}>
-          <div>
-            <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--mint)", letterSpacing: "0.2em", marginBottom: 10 }}>PRODUCTS</div>
-            {products.map((p) => {
-              const m = matches[p.id];
-              const cat = categories.find((c) => c.id === m);
-              const correct = shown ? m === p.correct : null;
-              const isSelected = selectedProduct === p.id;
-              return (
-                <div
-                  key={p.id}
-                  className="panel"
-                  onClick={() => !shown && setSelectedProduct(p.id)}
-                  style={{
-                    padding: 14,
-                    marginBottom: 10,
-                    cursor: shown ? "default" : "pointer",
-                    borderColor: shown
-                      ? (correct ? "var(--mint)" : "var(--danger)")
-                      : (isSelected ? "var(--pink)" : (m ? "var(--lav)" : "var(--panel-edge)")),
-                    boxShadow: isSelected && !shown ? "0 0 24px rgba(255, 143, 208, 0.45)" : "none",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontSize: 26 }}>{p.emoji}</span>
-                    <div style={{ flex: 1 }}>
-                      <div className="serif" style={{ fontWeight: 700, fontSize: 15, color: "var(--ink-bright)" }}>{p.name}</div>
-                      <div style={{ fontSize: 12, color: "var(--ink-dim)", lineHeight: 1.5 }}>{p.desc}</div>
-                    </div>
-                  </div>
-                  {m && (
-                    <div className="mono" style={{ fontSize: 11, fontWeight: 700, marginTop: 8, color: cat?.c, letterSpacing: "0.15em" }}>
-                      → {cat?.label}
-                      {!shown && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMatches((x) => { const n = {...x}; delete n[p.id]; return n; });
-                          }}
-                          style={{ marginLeft: 8, background: "transparent", border: "none", color: "var(--ink-dim)", cursor: "pointer", fontSize: 14 }}
-                        >✕</button>
-                      )}
-                    </div>
-                  )}
-                  {shown && (
-                    <div className="mono" style={{ fontSize: 11, marginTop: 8, color: correct ? "var(--mint)" : "var(--peach)", lineHeight: 1.5 }}>
-                      {correct ? "▣ " : "◌ "}{p.explain}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div>
-            <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--lav)", letterSpacing: "0.2em", marginBottom: 10 }}>CATEGORIES</div>
-            {!selectedProduct && !shown && (
-              <p className="mono" style={{ fontSize: 11, color: "var(--peach)", marginBottom: 10 }}>← Select a product first</p>
-            )}
+
+        {/* Reference card showing categories at the top - so player remembers what they mean */}
+        <div className="panel" style={{ padding: 16, marginBottom: 18, background: "rgba(0,0,0,0.5)" }}>
+          <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: "var(--lav)", letterSpacing: "0.2em", marginBottom: 10 }}>▸ CATEGORY REFERENCE</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 8 }}>
             {categories.map((c) => (
-              <button
-                key={c.id}
-                disabled={shown || !selectedProduct}
-                onClick={() => {
-                  if (!selectedProduct) return;
-                  setMatches((x) => ({ ...x, [selectedProduct]: c.id }));
-                  // auto-pick next unmatched product
-                  const nextUnmatched = products.find((p) => p.id !== selectedProduct && !matches[p.id]);
-                  setSelectedProduct(nextUnmatched ? nextUnmatched.id : null);
-                }}
-                className="btn"
-                style={{
-                  display: "block", width: "100%", textAlign: "left", padding: "16px",
-                  marginBottom: 10,
-                  borderColor: c.c, color: c.c,
-                  opacity: (shown || !selectedProduct) ? 0.5 : 1,
-                }}
-              >
-                <div className="mono" style={{ fontSize: 13, fontWeight: 700 }}>{c.label}</div>
-                <div style={{ fontSize: 11, color: "var(--ink-dim)", textTransform: "none", letterSpacing: 0, marginTop: 4 }}>{c.desc}</div>
-              </button>
+              <div key={c.id} style={{ padding: "8px 10px", borderLeft: `3px solid ${c.c}`, background: "rgba(255,255,255,0.02)" }}>
+                <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: c.c }}>{c.label}</div>
+                <div style={{ fontSize: 11, color: "var(--ink-dim)", marginTop: 2 }}>{c.desc}</div>
+              </div>
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
+
+        {/* Product cards with inline category pickers */}
+        <div style={{ display: "grid", gap: 12 }}>
+          {products.map((p, idx) => {
+            const m = matches[p.id];
+            const cat = categories.find((c) => c.id === m);
+            const correct = shown ? m === p.correct : null;
+            return (
+              <div
+                key={p.id}
+                className="panel"
+                style={{
+                  padding: 16,
+                  borderColor: shown
+                    ? (correct ? "var(--mint)" : "var(--danger)")
+                    : (m ? cat?.c : "var(--panel-edge)"),
+                  borderWidth: m && !shown ? 2 : 1,
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+                  <span style={{ fontSize: 32, lineHeight: 1 }}>{p.emoji}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                      <span className="mono" style={{ fontSize: 10, fontWeight: 700, color: "var(--ink-faint)", letterSpacing: "0.15em" }}>#{idx + 1}</span>
+                      <span className="serif" style={{ fontWeight: 700, fontSize: 16, color: "var(--ink-bright)" }}>{p.name}</span>
+                    </div>
+                    <div style={{ fontSize: 13, color: "var(--ink-dim)", lineHeight: 1.55, marginTop: 4 }}>{p.desc}</div>
+                  </div>
+                </div>
+
+                {/* Category buttons row - the player taps one here */}
+                {!shown && (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 6, marginTop: 14 }}>
+                    {categories.map((c) => {
+                      const picked = m === c.id;
+                      return (
+                        <button
+                          key={c.id}
+                          className="btn"
+                          onClick={() => setMatches((x) => ({ ...x, [p.id]: c.id }))}
+                          style={{
+                            padding: "10px 10px",
+                            fontSize: 11,
+                            letterSpacing: "0.04em",
+                            textAlign: "center",
+                            borderColor: picked ? c.c : "var(--panel-edge)",
+                            color: picked ? c.c : "var(--ink-dim)",
+                            background: picked ? `${c.c}15` : "rgba(20, 14, 32, 0.7)",
+                            fontWeight: picked ? 700 : 500,
+                          }}
+                        >
+                          {c.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Selected-state confirmation chip */}
+                {m && !shown && (
+                  <div className="mono" style={{ fontSize: 11, fontWeight: 700, marginTop: 10, color: cat?.c, letterSpacing: "0.1em" }}>
+                    ▸ CLASSIFIED AS {cat?.label.toUpperCase()}
+                  </div>
+                )}
+
+                {/* Feedback after evaluation */}
+                {shown && (
+                  <div style={{ marginTop: 12, padding: 12, borderLeft: `3px solid ${correct ? "var(--mint)" : "var(--peach)"}`, background: "rgba(0,0,0,0.4)" }}>
+                    <div className="mono" style={{ fontSize: 10, fontWeight: 700, color: correct ? "var(--mint)" : "var(--peach)", letterSpacing: "0.2em", marginBottom: 4 }}>
+                      {correct ? "▣ CORRECT" : `◌ ANSWER: ${categories.find(c => c.id === p.correct)?.label.toUpperCase()}`}
+                    </div>
+                    <p style={{ fontSize: 12, margin: 0, color: "var(--ink-bright)", lineHeight: 1.55 }}>{p.explain}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap", justifyContent: "center" }}>
           {!shown && <button className="btn btn-primary" disabled={!allMatched} onClick={() => setShown(true)}>EVALUATE MATCHES ▸</button>}
           {shown && <button className="btn btn-primary" onClick={() => setStep(2)}>VIEW CONCEPT ▸</button>}
           {!shown && Object.keys(matches).length > 0 && <button className="btn" onClick={() => { setMatches({}); setSelectedProduct(null); }}>↺ Reset</button>}
