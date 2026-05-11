@@ -394,6 +394,14 @@ const styles = `
     .level-shell .panel {
       margin-bottom: 14px;
     }
+    /* hide corner tags on mobile - they overlap with content */
+    .hide-on-mobile {
+      display: none !important;
+    }
+    /* tighter intro/ending padding on mobile */
+    .ending-panel {
+      padding: 36px 22px !important;
+    }
   }
 
   /* ===== RESPONSIVE: layout helpers ===== */
@@ -678,7 +686,7 @@ function Intro({ onStart }) {
   return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" }}>
       <div className="panel fade-up intro-panel" style={{ maxWidth: 760, padding: "60px 50px", textAlign: "center", position: "relative" }}>
-        <div className="corner-tag">FILE: HUMAN_BEHAVIOR.OBS</div>
+        <div className="corner-tag hide-on-mobile">FILE: HUMAN_BEHAVIOR.OBS</div>
         <div className="scanline" />
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.4em", color: "var(--mint)", marginBottom: 24 }} className="mono">
           ▸ TRANSMISSION INCOMING
@@ -2039,11 +2047,11 @@ function Boss({ onDone, setLevelBack }) {
 function Ending({ score, mastered, onRestart }) {
   return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px" }}>
-      <div className="panel fade-up" style={{ maxWidth: 720, padding: "50px 40px", textAlign: "center", position: "relative" }}>
+      <div className="panel fade-up ending-panel" style={{ maxWidth: 720, padding: "50px 40px", textAlign: "center", position: "relative" }}>
         <div className="scanline" />
-        <div className="corner-tag">FINAL_REPORT.OBS</div>
-        <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--mint)", letterSpacing: "0.4em" }}>▸ TRANSMISSION COMPLETE</div>
-        <h2 className="title-font glow-text" style={{ fontSize: "clamp(34px, 6vw, 56px)", color: "var(--pink)", margin: "16px 0", letterSpacing: "0.05em", lineHeight: 1.15 }}>Experiment Concluded</h2>
+        <div className="corner-tag hide-on-mobile">FINAL_REPORT.OBS</div>
+        <div className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--mint)", letterSpacing: "0.3em", lineHeight: 1.5 }}>▸ TRANSMISSION COMPLETE</div>
+        <h2 className="title-font glow-text" style={{ fontSize: "clamp(30px, 7vw, 56px)", color: "var(--pink)", margin: "20px 0", letterSpacing: "0.05em", lineHeight: 1.2 }}>Experiment Concluded</h2>
         <Alien accent="var(--pink)">
           Final hypothesis confirmed. Earth species do not buy products. They buy <em>meaning, identity, status, trust, and packaging</em>. The function is incidental. The story is the product.
         </Alien>
