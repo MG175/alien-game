@@ -1039,11 +1039,46 @@ function Level2({ onDone, setLevelBack }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   const baseProducts = [
-    { id: "snack", name: "Alien Snack Cube", emoji: "🟫", correct: "convenience", desc: "Cheap. Vending-machine ready.", explain: "Inexpensive, low effort, routine purchase = convenience product." },
-    { id: "shoesA", name: "Generic Hover Shoes", emoji: "👟", correct: "homog", desc: "Compared on price/specs by 4 humans before buying.", explain: "Buyers compare similar items mainly on price/features → homogeneous shopping product." },
-    { id: "couch", name: "Mood-Adaptive Couch", emoji: "🛋", correct: "heter", desc: "Style, fabric, vibe — all different.", explain: "Distinct style and quality variations → heterogeneous shopping product." },
-    { id: "watch", name: "Limited Galactic Watch", emoji: "⌚", correct: "specialty", desc: "Only 100 made. Buyers travel cross-galaxy.", explain: "Unique, high loyalty, special effort to acquire = specialty product." },
-    { id: "helmet", name: "Asteroid Insurance Helmet", emoji: "🪖", correct: "unsought", desc: "Humans avoid thinking about it. Sold via fear.", explain: "New/avoided/aggressively sold = unsought product." },
+    {
+      id: "pebble",
+      name: "Mood Pebble",
+      emoji: "🪨",
+      correct: "convenience",
+      desc: "Tiny rock in a $1.99 plastic pouch. Sold at every checkout counter across Earth.",
+      explain: "Cheap, low effort, impulse buy at checkout = convenience product. Humans grab it without thinking.",
+    },
+    {
+      id: "wellness",
+      name: "Wellness Rock Set",
+      emoji: "🪨",
+      correct: "homog",
+      desc: "Mid-priced rock kits. Buyers compare 3-4 brands on price-per-gram and crystal count before choosing.",
+      explain: "Mid-priced, similar competing options, compared on price and specs = homogeneous shopping product.",
+    },
+    {
+      id: "designer",
+      name: "Designer Mood Stone",
+      emoji: "🪨",
+      correct: "heter",
+      desc: "Hand-carved rocks in 12 colors and 8 shapes. Each one feels different. Buyers visit multiple stores to find the right vibe.",
+      explain: "Distinct styles, quality variations, compared by aesthetic feel = heterogeneous shopping product.",
+    },
+    {
+      id: "aether",
+      name: "Aether Stone (Limited Edition)",
+      emoji: "🪨",
+      correct: "specialty",
+      desc: "Only 100 made per year. Sold at one boutique. Buyers travel across continents and refuse substitutes.",
+      explain: "Rare, high loyalty, no acceptable substitutes, buyers exert special effort = specialty product.",
+    },
+    {
+      id: "crisis",
+      name: "Crisis Anti-Despair Rock",
+      emoji: "🪨",
+      correct: "unsought",
+      desc: "Marketed via emergency hotlines. Humans avoid thinking about it. Heavy persuasion required to sell.",
+      explain: "New/avoided/sold via aggressive emotional appeals = unsought product.",
+    },
   ];
 
   const baseCategories = [
@@ -1077,10 +1112,13 @@ function Level2({ onDone, setLevelBack }) {
     <LevelShell title="02 / Classify the Human Desire" tag="STAGE 02" stepKey={step}>
       <div className="briefing-wrap">
       <Alien accent="var(--peach)">
-        Humans buy products in <em>different ways</em>. Some grab without thinking. Some compare for hours. Some travel for one specific item. Some <em>refuse to buy until forced</em>. Classify each.
+        We took the same Anti-Sadness Rock and gave it to five different teams. Each repackaged, repriced, and resold it as a <em>different kind of product</em>. Humans reacted in five different ways.
       </Alien>
       <p className="serif">
-        Match each alien product to the correct purchase behavior category. Note that <strong style={{ color: "var(--ink)" }}>shopping products</strong> split into two flavors: homogeneous (compared on price/features) and heterogeneous (compared on style/quality).
+        The same rock can be a cheap convenience item, a comparison-shopped wellness kit, a designer luxury, an ultra-rare collectible, or an avoided emergency purchase. <strong style={{ color: "var(--ink)" }}>Classification isn't about the object — it's about how it's positioned.</strong>
+      </p>
+      <p className="serif">
+        Note that <strong style={{ color: "var(--ink)" }}>shopping products</strong> split into two: homogeneous (compared on price/features) and heterogeneous (compared on style/quality).
       </p>
       <button className="btn btn-primary" onClick={() => setStep(1)}>BEGIN CLASSIFICATION ▸</button>
       </div>
@@ -1092,7 +1130,7 @@ function Level2({ onDone, setLevelBack }) {
     return (
       <LevelShell title="02 / Classification Console" tag="LAB-B" stepKey={step}>
         <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 16, fontWeight: 600 }}>
-          ▸ For each product, tap the category that matches how humans buy it.
+          ▸ Five rock variants. Same object, different positioning. Tap the category that matches how humans buy each one.
         </p>
 
         {/* Reference card showing categories at the top - so player remembers what they mean */}
@@ -1200,6 +1238,9 @@ function Level2({ onDone, setLevelBack }) {
     <LevelShell title="02 / Concept" tag="CHAPTER 10 INSIGHT" stepKey={step}>
       <div className="panel" style={{ padding: 30 }}>
         <h3 className="serif" style={{ fontSize: 24, color: "var(--mint)", margin: 0 }}>Four ways humans buy.</h3>
+        <p style={{ color: "var(--ink-dim)", lineHeight: 1.7, marginTop: 12, fontSize: 14 }}>
+          The rock was always the same rock. But by changing <strong style={{ color: "var(--ink-bright)" }}>price, distribution, scarcity, and emotional framing</strong>, it became four entirely different kinds of product to humans.
+        </p>
         <div style={{ display: "grid", gap: 12, marginTop: 18 }}>
           {[
             { t: "Convenience product", c: "var(--mint)", d: "Inexpensive, low effort, easy purchase. Bought routinely with little thought." },
@@ -1213,6 +1254,9 @@ function Level2({ onDone, setLevelBack }) {
             </div>
           ))}
         </div>
+        <p className="serif" style={{ fontStyle: "italic", color: "var(--pink)", marginTop: 20, fontSize: 16, lineHeight: 1.5 }}>
+          Classification follows positioning. The marketer chooses the category.
+        </p>
       </div>
       <button className="btn btn-primary" onClick={() => setStep(3)}>QUIZ CHECKPOINT ▸</button>
     </LevelShell>
