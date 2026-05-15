@@ -1495,22 +1495,22 @@ function Level3({ onDone, setLevelBack }) {
 
     return (
       <LevelShell title="03 / Human Reaction Screen" tag="OBSERVATION" stepKey={step}>
-        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 16, fontWeight: 600 }}>
+        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 20, fontWeight: 600 }}>
           ▸ Five human segments responded to your branding choices. Different priorities, different reactions.
         </p>
-        <div style={{ display: "grid", gap: 12 }}>
+        <div style={{ display: "grid", gap: 14, maxWidth: 760, margin: "0 auto" }}>
           {reactions.map((r) => {
             const s = SEGMENTS[r.seg];
             return (
-              <div key={r.seg} className="panel" style={{ padding: 18, borderLeft: `3px solid ${s.color}` }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-                  <span style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
-                  <div>
-                    <div className="serif" style={{ fontWeight: 700, fontSize: 16, color: "var(--ink-bright)" }}>{s.name}</div>
-                    <div className="mono" style={{ fontSize: 10, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.1em", marginTop: 2 }}>{s.desc}</div>
+              <div key={r.seg} className="panel" style={{ padding: 20, borderLeft: `3px solid ${s.color}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
+                  <span style={{ fontSize: 26, lineHeight: 1, color: s.color, flexShrink: 0 }}>{s.icon}</span>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div className="serif" style={{ fontWeight: 700, fontSize: 17, color: "var(--ink-bright)", lineHeight: 1.2 }}>{s.name}</div>
+                    <div className="mono" style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.08em", marginTop: 3 }}>{s.desc}</div>
                   </div>
                 </div>
-                <p style={{ fontSize: 14, color: "var(--ink-dim)", margin: 0, lineHeight: 1.65 }}>{r.reaction}</p>
+                <p style={{ fontSize: 14.5, color: "var(--ink-dim)", margin: 0, lineHeight: 1.7, textAlign: "left" }}>{r.reaction}</p>
               </div>
             );
           })}
@@ -1768,30 +1768,30 @@ function Level4({ onDone, setLevelBack }) {
           <div className="mono" style={{ color: "var(--ink-dim)", letterSpacing: "0.2em", fontSize: 12, fontWeight: 700 }}>UNITS PURCHASED ACROSS HUMAN SEGMENTS</div>
         </div>
 
-        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 12, fontWeight: 600 }}>
+        <p className="mono" style={{ fontSize: 13, color: "var(--ink-bright)", marginBottom: 16, fontWeight: 600 }}>
           ▸ How each human segment reacted to your packaging:
         </p>
 
-        <div style={{ display: "grid", gap: 12 }}>
+        <div style={{ display: "grid", gap: 14, maxWidth: 760, margin: "0 auto" }}>
           {segmentResults.map((r) => {
             const s = SEGMENTS[r.seg];
             const sales = Math.max(0, r.score) * 6;
             return (
-              <div key={r.seg} className="panel" style={{ padding: 18, borderLeft: `3px solid ${s.color}` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8, flexWrap: "wrap" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
-                    <div>
-                      <div className="serif" style={{ fontWeight: 700, fontSize: 16, color: "var(--ink-bright)" }}>{s.name}</div>
-                      <div className="mono" style={{ fontSize: 10, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.1em", marginTop: 2 }}>{s.desc}</div>
+              <div key={r.seg} className="panel" style={{ padding: 20, borderLeft: `3px solid ${s.color}` }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, marginBottom: 12, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, minWidth: 0 }}>
+                    <span style={{ fontSize: 26, lineHeight: 1, color: s.color, flexShrink: 0 }}>{s.icon}</span>
+                    <div style={{ minWidth: 0 }}>
+                      <div className="serif" style={{ fontWeight: 700, fontSize: 17, color: "var(--ink-bright)", lineHeight: 1.2 }}>{s.name}</div>
+                      <div className="mono" style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-faint)", letterSpacing: "0.08em", marginTop: 3 }}>{s.desc}</div>
                     </div>
                   </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div className="alien-font" style={{ fontSize: 22, lineHeight: 1.2, color: s.color }}>{sales}</div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div className="alien-font" style={{ fontSize: 24, lineHeight: 1.2, color: s.color }}>{sales}</div>
                     <div className="mono" style={{ fontSize: 9, fontWeight: 700, color: "var(--ink-faint)", letterSpacing: "0.15em" }}>UNITS</div>
                   </div>
                 </div>
-                <p style={{ fontSize: 14, color: "var(--ink-dim)", margin: 0, lineHeight: 1.65 }}>{reactionFor(r.seg, r.score)}</p>
+                <p style={{ fontSize: 14.5, color: "var(--ink-dim)", margin: 0, lineHeight: 1.7, textAlign: "left" }}>{reactionFor(r.seg, r.score)}</p>
               </div>
             );
           })}
